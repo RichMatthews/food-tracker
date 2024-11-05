@@ -1,0 +1,15 @@
+DROP TABLE IF EXISTS table_name;
+
+CREATE TABLE meals (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) UNIQUE NOT NULL
+);
+
+CREATE TABLE meal_ingredients (
+    id SERIAL PRIMARY KEY,
+    meal_id INTEGER NOT NULL,
+    ingredient_id INTEGER NOT NULL,
+    FOREIGN KEY (meal_id) REFERENCES meals(id),
+    FOREIGN KEY (ingredient_id) REFERENCES ingredients(id)
+);

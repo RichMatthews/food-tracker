@@ -6,7 +6,6 @@ export default function Slug() {
   const searchParams = usePathname()
   const slug = searchParams.split("/")[2]
   const data = ingredients.find((ingredient) => ingredient.slug === slug)
-  console.log(data)
 
   return (
     <div>

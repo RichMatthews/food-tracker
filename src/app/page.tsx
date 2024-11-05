@@ -1,5 +1,9 @@
+"use client"
 import Link from "next/link"
 import BoxContainer from "@/components/BoxContainer"
+import { db, sql } from "@vercel/postgres"
+import { IngredientsContext } from "@/context/IngredientsContext"
+import { useEffect, useState } from "react"
 
 export default function Home() {
   return (

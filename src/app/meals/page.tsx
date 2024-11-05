@@ -1,8 +1,13 @@
+"use client"
 import BoxContainer from "@/components/BoxContainer"
-import { meals } from "@/data"
+import { MealsContext } from "@/context/MealsContext"
+
 import Link from "next/link"
+import { useContext } from "react"
 
 export default function Meals() {
+  const { meals } = useContext(MealsContext)
+
   return (
     <div className="m-12 ">
       <h2 className="text-2xl">Your meals</h2>
