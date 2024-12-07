@@ -1,0 +1,41 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Ingredient {
+  id             Int              @id @default(autoincrement())
+  name           String
+  fat            Decimal
+  carbohydrate   Decimal
+  protein        Decimal
+  salt           Decimal
+  costPerUnit    Decimal
+  unit           String
+  meals          Meal[]           @relation("MealIngredients")
+  MealIngredient MealIngredient[]
+}
+
+model Meal {
+  id             Int              @id @default(autoincrement())
+  name           String
+  ingredients    Ingredient[]     @relation("MealIngredients")
+  MealIngredient MealIngredient[]
+}
+
+model MealIngredient {
+  id           Int     @id @default(autoincrement())
+  mealId       Int
+  ingredientId Int
+  quantity     Decimal
+
+  meal       Meal       @relation(fields: [mealId], references: [id])
+  ingredient Ingredient @relation(fields: [ingredientId], references: [id])
+}

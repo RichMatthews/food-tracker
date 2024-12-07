@@ -14,19 +14,16 @@ export const Providers = ({ children }) => {
         .catch((x) => console.error(`There was an error, possibly: ${x}`))
 
       setIngredients(response.data)
-
-      const response2 = await fetch(`/api/meals`)
-        .then((data) => data.json())
-        .catch((x) => console.error(`There was an error, possibly: ${x}`))
-
-      setMeals(response2.data)
     }
     fetchData()
   }, [])
 
   return (
     <IngredientsContext.Provider
-      value={{ ingredients, updateIngredients: setIngredients }}
+      value={{
+        userLoggedIngredients: ingredients,
+        updateIngredients: setIngredients,
+      }}
     >
       <MealsContext.Provider value={{ meals }}>
         {children}
