@@ -11,21 +11,25 @@ datasource db {
 }
 
 model Ingredient {
-  id             Int              @id @default(autoincrement())
-  name           String
-  fat            Decimal
-  carbohydrate   Decimal
-  protein        Decimal
-  salt           Decimal
-  costPerUnit    Decimal
-  unit           String
+  id           Int     @id @default(autoincrement())
+  slug         String  @default("")
+  name         String
+  fat          Decimal
+  carbohydrate Decimal
+  protein      Decimal
+  salt         Decimal
+  costPerUnit  Decimal
+  unit         String
+
   meals          Meal[]           @relation("MealIngredients")
   MealIngredient MealIngredient[]
 }
 
 model Meal {
-  id             Int              @id @default(autoincrement())
-  name           String
+  id   Int    @id @default(autoincrement())
+  name String
+  slug String @default("")
+
   ingredients    Ingredient[]     @relation("MealIngredients")
   MealIngredient MealIngredient[]
 }

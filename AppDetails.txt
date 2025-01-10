@@ -1,0 +1,79 @@
+Meal tracker app
+
+- Create Input page
+- Set up an easy db (mongo?)
+- Works out cost of meal
+- Search ingredients that shows available meals
+- Search that works out meals with X missing ingredients
+- Upload photos of meals
+- Weekly planner
+- Nutritional information from API
+- Login
+
+FEATURES
+- Barcode scanner
+- Useby date alerts
+- Ingredients list generator
+- Cost predictor
+- Photo upload
+- Planner
+
+DB
+- Set up a db https://nextjs.org/learn/dashboard-app/setting-up-your-database
+- Structure
+- Tables: Meals Table, Ingredients Table, Meals with extra info, 
+
++-------------------+
+|      User        |
++-------------------+
+| id                |
+| email             |
++-------------------+
+
++-------------------+
+|  MealPlan        |
++-------------------+
+| id               |
+| user_id          |
+| name             |
+| description      |
+| start_date       |
+| end_date         |
++-------------------+
+
++-------------------+
+|      Meal        |
++-------------------+
+| id               |
+| meal_plan_id     |
+| meal_type        |
+| date             |
+| item_name        |
+| calories         |
+| protein          |
+| carbs            |
+| fat              |
++-------------------+
+
++-------------------+
+| Ingredient       |
++-------------------+
+| id               |
+| ingredient_name  |
+| quantity          |
+| unit              |
++-------------------+
+
+- PAGES
+- ingredients (id, provider (supermarket), fat, protein, carbs, salt, sugar, image, comparable, scanable option)
+- individual meal (id, name, ingredients list, option to create single meal or batch, cost of meal, upload photo)
+- meal planner (calendar page?)
+- search (search for a meal or ingredient, allow updating of either)
+
+LATER
+- Auth/login
+- Scanning bar code
+- Uploading photos
+- Complex search
+
+

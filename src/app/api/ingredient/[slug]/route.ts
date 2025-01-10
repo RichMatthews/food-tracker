@@ -1,11 +1,12 @@
 import { PrismaClient } from "@prisma/client"
 import { NextResponse } from "next/server"
 
-export async function GET(request) {
+export async function GET(_request: any, { params }: { params: any }) {
+  const slug = (await params).slug
   const prisma = new PrismaClient()
-  const data = await prisma.ingredient.findUnique({
-    where: { id: 1 },
+  const data = await prisma.ingredient.findFirst({
+    where: { slug: slug },
   })
-  console.log(data, "data??")
+
   return NextResponse.json({ data }, { status: 200 })
 }

@@ -1,0 +1,126 @@
+"use client"
+
+import * as React from "react"
+import { useChat } from "ai/react"
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import KitchenChatbotIngredient from "./KitchenChatbotIngredient"
+
+export default function KitchenChatbot() {
+  const { messages, input, handleInputChange, handleSubmit } = useChat()
+  const [isTyping, setIsTyping] = useState(false)
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    setIsTyping(true)
+    handleSubmit(e).finally(() => setIsTyping(false))
+  }
+
+  return (
+    <div className="flex items-center w-1/2">
+      <Card className="w-full">
+        <CardHeader>
+          <CardTitle>Kitchen Chatbot</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ScrollArea className="h-[60vh] pr-4">
+            {messages.map((m) => (
+              <div
+                key={m.id}
+                className={`mb-4 flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
+              >
+                <div
+                  className={`flex items-start gap-2 ${m.role === "user" ? "flex-row-reverse" : ""}`}
+                >
+                  <Avatar>
+                    <AvatarFallback>
+                      {m.role === "user" ? "U" : "AI"}
+                    </AvatarFallback>
+                    <AvatarImage
+                      src={
+                        m.role === "user"
+                          ? "/user-avatar.png"
+                          : "/ai-avatar.png"
+                      }
+                    />
+                  </Avatar>
+                  <div
+                    className={`rounded-lg p-2 ${m.role === "user" ? "bg-blue-500 text-white" : "bg-gray-200 text-black"}`}
+                  >
+                    {m.content}
+                  </div>
+                  <div>
+                    {m.toolInvocations?.map((toolInvocation) => {
+                      const { toolName, state } = toolInvocation
+
+                      if (state === "result") {
+                        if (toolName === "requestFoodNutritionalInformation") {
+                          const { result } = toolInvocation
+
+                          return (
+                            <KitchenChatbotIngredient ingredient={result} />
+                          )
+                        }
+
+                        if (toolName === "addFoodItemsToDatabase") {
+                          const { result } = toolInvocation
+                          return <div>Hopefully added to db...</div>
+                        }
+
+                        if (toolName === "displayListOfUserIngredients") {
+                          const { result } = toolInvocation
+
+                          const ingredients = result[0].data
+                            .flatMap((ingredient) => ingredient.name)
+                            .join(", ")
+                          return (
+                            <div>These are your ingredients: {ingredients}</div>
+                          )
+                        }
+                      }
+                    })}
+                  </div>
+                </div>
+              </div>
+            ))}
+            {isTyping && (
+              <div className="flex justify-start mb-4">
+                <div className="flex items-center gap-2">
+                  <Avatar>
+                    <AvatarFallback>AI</AvatarFallback>
+                    <AvatarImage src="/ai-avatar.png" />
+                  </Avatar>
+                  <div className="bg-gray-200 text-black rounded-lg p-2">
+                    AI is typing...
+                  </div>
+                </div>
+              </div>
+            )}
+          </ScrollArea>
+        </CardContent>
+        <CardFooter>
+          <form onSubmit={onSubmit} className="flex w-full space-x-2">
+            <Input
+              value={input}
+              onChange={handleInputChange}
+              placeholder="Type your message..."
+              className="flex-grow"
+            />
+            <Button type="submit" disabled={isTyping}>
+              Send
+            </Button>
+          </form>
+        </CardFooter>
+      </Card>
+    </div>
+  )
+}

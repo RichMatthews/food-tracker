@@ -9,15 +9,24 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^1.0.13",
     "@prisma/client": "6.0.1",
+    "@radix-ui/react-avatar": "^1.1.2",
+    "@radix-ui/react-scroll-area": "^1.2.2",
+    "@radix-ui/react-slot": "^1.1.1",
     "@vercel/postgres": "^0.10.0",
+    "ai": "^4.0.26",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
     "next": "15.0.1",
     "prettier": "^3.3.3",
     "prisma": "^6.0.1",
     "react": "19.0.0-rc-69d4b800-20241021",
     "react-dom": "19.0.0-rc-69d4b800-20241021",
-    "react-select": "^5.8.2"
+    "tailwind-merge": "^2.6.0",
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@types/node": "^20",

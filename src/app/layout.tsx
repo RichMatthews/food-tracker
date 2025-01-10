@@ -1,6 +1,5 @@
 "use client"
 import localFont from "next/font/local"
-import { Providers } from "@/providers"
 import "./globals.css"
 
 const geistSans = localFont({
@@ -14,20 +13,18 @@ const geistMono = localFont({
   weight: "100 900",
 })
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
   return (
-    <Providers>
-      <html lang="en">
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
-          {children}
-        </body>
-      </html>
-    </Providers>
+    <html lang="en">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        {children}
+      </body>
+    </html>
   )
 }
