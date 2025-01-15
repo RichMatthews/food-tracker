@@ -4,20 +4,19 @@ import { NextApiResponse } from "next"
 
 export async function GET() {
   const prisma = new PrismaClient()
-  const rows = await prisma.ingredient.findMany()
+  const rows = await prisma.foodProduct.findMany()
 
   return NextResponse.json({ data: rows }, { status: 200 })
 }
 
 export async function POST(req: Request, res: NextApiResponse) {
-  const ingredients = await req.json()
+  const foodProducts = await req.json()
   const prisma = new PrismaClient()
 
   try {
-    const results = await prisma.ingredient
-      .createMany({ data: ingredients })
+    const results = await prisma.foodProduct
+      .createMany({ data: foodProducts })
       .then((x) => console.log(x))
-      .catch((e) => console.log("Failed to add:", e))
 
     res.status(200).json({ message: "Success", data: results })
   } catch (error: any) {
@@ -27,6 +26,6 @@ export async function POST(req: Request, res: NextApiResponse) {
     })
   } finally {
     await prisma.$disconnect()
-    return NextResponse.json({ data: ingredients, res: "Success" })
+    return NextResponse.json({ data: foodProducts, res: "Success" })
   }
 }

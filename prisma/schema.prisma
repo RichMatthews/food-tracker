@@ -10,19 +10,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Ingredient {
-  id           Int     @id @default(autoincrement())
-  slug         String  @default("")
+model FoodProduct {
+  id           Int    @id @default(autoincrement())
+  slug         String @default("")
   name         String
-  fat          Decimal
-  carbohydrate Decimal
-  protein      Decimal
-  salt         Decimal
-  costPerUnit  Decimal
+  fat          String
+  carbohydrate String
+  protein      String
+  salt         String
+  costPerUnit  String
   unit         String
 
-  meals          Meal[]           @relation("MealIngredients")
-  MealIngredient MealIngredient[]
+  meals           Meal[]            @relation("FoodProducts")
+  MealFoodProduct MealFoodProduct[]
 }
 
 model Meal {
@@ -30,16 +30,16 @@ model Meal {
   name String
   slug String @default("")
 
-  ingredients    Ingredient[]     @relation("MealIngredients")
-  MealIngredient MealIngredient[]
+  foodProducts    FoodProduct[]     @relation("FoodProducts")
+  MealFoodProduct MealFoodProduct[]
 }
 
-model MealIngredient {
-  id           Int     @id @default(autoincrement())
-  mealId       Int
-  ingredientId Int
-  quantity     Decimal
+model MealFoodProduct {
+  id            Int     @id @default(autoincrement())
+  mealId        Int
+  foodProductId Int
+  quantity      Decimal
 
-  meal       Meal       @relation(fields: [mealId], references: [id])
-  ingredient Ingredient @relation(fields: [ingredientId], references: [id])
+  meal        Meal        @relation(fields: [mealId], references: [id])
+  foodProduct FoodProduct @relation(fields: [foodProductId], references: [id])
 }
