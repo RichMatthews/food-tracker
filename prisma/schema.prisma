@@ -12,13 +12,17 @@ datasource db {
 
 model FoodProduct {
   id           Int    @id @default(autoincrement())
-  slug         String @default("")
-  name         String
-  fat          String
+  brand        String @default("")
+  calories     String
   carbohydrate String
+  cost         String
+  fat          String
+  food_group   String
+  name         String
   protein      String
+  quantity     String
   salt         String
-  costPerUnit  String
+  slug         String @default("")
   unit         String
 
   meals           Meal[]            @relation("FoodProducts")

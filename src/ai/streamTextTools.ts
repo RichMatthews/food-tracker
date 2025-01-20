@@ -20,7 +20,7 @@
 //     ),
 //   }),
 //   execute: async function ({ items }: { items: Array<Ingredient> }) {
-//     console.log(items, "hte items")
+
 //     try {
 //       await fetch(`${domain}/api/ingredients`, {
 //         headers: {
@@ -30,7 +30,7 @@
 //         body: JSON.stringify(items),
 //       }).then((result) => result.json())
 //     } catch (e) {
-//       console.log("An error occurred -->", e)
+//       console.error("An error occurred -->", e)
 //     }
 //     return items
 //   },
@@ -55,7 +55,7 @@
 //   }),
 //   execute: async function ({ items }: { items: Array<Ingredient> }) {
 //     let suitableItems = []
-//     console.log("in the display tool correctly")
+
 //     try {
 //       await fetch(`${domain}/api/ingredients`, {
 //         headers: {
@@ -67,12 +67,10 @@
 //         .then((x) => suitableItems.push(x))
 
 //       // await apiRequest("http://localhost:3000/api/ingredients", "GET").then(
-//       //   (x) => {
-//       //     console.log(x, "should be ingredients list")
-//       //   },
+//       //   (x) => {},
 //       // )
 //     } catch (e) {
-//       console.log("An error occurred -->", e)
+//       console.error("An error occurred -->", e)
 //     }
 //     return suitableItems
 //   },

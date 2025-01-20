@@ -25,7 +25,7 @@ export default function FoodProductDetails({
       <div className="flex items-center mb-2">
         <div className="font-bold mr-1">{foodProduct.name}</div>
         <span className="text-xs text-neutral-500">
-          (£ {foodProduct.costPerUnit}) / per {foodProduct.unit}
+          (£ {foodProduct.cost}) / per {foodProduct.unit}
         </span>
       </div>
 

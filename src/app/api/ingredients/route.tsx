@@ -16,7 +16,8 @@ export async function POST(req: Request, res: NextApiResponse) {
   try {
     const results = await prisma.foodProduct
       .createMany({ data: foodProducts })
-      .then((x) => console.log(x))
+      .then((x) => console.log("Successfully created products"))
+      .catch((e) => console.error(`Error creating food products, ${e}`))
 
     res.status(200).json({ message: "Success", data: results })
   } catch (error: any) {

@@ -11,8 +11,6 @@ export default function KitchenChatbot() {
   const [conversation, setConversation] = useUIState()
   const { initializeChatInteraction } = useActions()
 
-  console.log(conversation, "::::: conversations :::::")
-
   useEffect(() => {
     onLoad()
   }, [])

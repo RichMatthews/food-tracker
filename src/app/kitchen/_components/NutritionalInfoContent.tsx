@@ -1,8 +1,8 @@
-"use server"
+"use client"
 import { FoodProduct } from "@prisma/client"
 import Image from "next/image"
 
-export default async function NutritionalInfoContent({
+export default function NutritionalInfoContent({
   foodProduct,
 }: {
   foodProduct: FoodProduct

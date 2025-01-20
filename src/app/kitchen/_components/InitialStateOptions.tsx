@@ -2,25 +2,19 @@
 
 import { PropsWithChildren, ReactNode } from "react"
 import { useActions, useUIState } from "ai/rsc"
+import { Button } from "@/components/ui/button"
 
-export default function InitialStateOptions() {
+export default function InitialStateOptions({
+  message = "Hello, welcome to your kitchen, what would you like to do today?",
+}) {
   return (
-    <div>
-      <div className="mb-4">
-        Hello, welcome to your kitchen, what would you like to do today?
-      </div>
+    <div className="mb-4">
+      <div className="mb-2 text-base">{message}</div>
       <div className="flex flex-wrap">
-        <Option messageTool="searchForFoodProduct">
-          Search for a product to add to your kitchen
-        </Option>
-
-        <Option messageTool="removeFoodProduct">
-          Remove a product from your kitchen
-        </Option>
-
-        <Option messageTool="editFoodProduct">
-          Edit a product in your kitchen
-        </Option>
+        <Option messageTool="searchForFoodProduct">Add a product</Option>
+        <Option messageTool="removeFoodProduct">Remove a product</Option>
+        <Option messageTool="editFoodProduct">Edit a product</Option>
+        <Option messageTool="createMeal">Create a meal</Option>
       </div>
     </div>
   )
@@ -34,15 +28,16 @@ const Option = ({
   const [_, setMessages] = useUIState()
 
   return (
-    <div
-      className="bg-black rounded-3xl cursor-pointer p-2 text-white mr-4 mb-4 text-sm hover:bg-gray-800"
+    <Button
+      className="mr-2"
       onClick={async () => {
         const display = await submitUserMessage(`${messageTool}`)
 
         setMessages((messages: ReactNode[]) => [...messages, display])
       }}
+      variant="default"
     >
       {children}
-    </div>
+    </Button>
   )
 }

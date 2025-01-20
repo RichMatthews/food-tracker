@@ -1,4 +1,4 @@
-import { type Ingredient } from "@prisma/client"
+import { type FoodProduct } from "@prisma/client"
 
 export function IngredientNutritionalInfo({
   calories,
@@ -6,7 +6,7 @@ export function IngredientNutritionalInfo({
   fat,
   protein,
   salt,
-}: Ingredient) {
+}: FoodProduct) {
   return (
     <div className="flex">
       <IndividualComponent name="Fat" value={fat} />
