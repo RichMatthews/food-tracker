@@ -5,6 +5,10 @@ import FoodProductSearch from "@/components/Chatbot/FoodProductSearch"
 import { domain } from "@/utils/constants"
 import AddProductsView from "@/views/AddProductsView"
 import InitialStateOptions from "@/app/kitchen/_components/InitialStateOptions"
+import { generateText, tool, generateObject } from "ai"
+import InitializeCreateMealView from "@/views/InitializeCreateMealView"
+import { openaiModel } from "./modal"
+import CreateMealView from "@/views/CreateMealView"
 
 export const addFoodProductToUserKitchen = {
   description: "Adds the food items to my database",
@@ -27,7 +31,11 @@ export const addFoodProductToUserKitchen = {
       }),
     ),
   }),
-  generate: async function* ({ items }: { items: Array<FoodProduct> }) {
+  generate: async function* ({
+    items,
+  }: {
+    items: Array<Omit<FoodProduct, "id">>
+  }) {
     yield `Adding ${items.length} products to the database`
     const products = await fetch(`${domain}/api/ingredients`, {
       headers: {
@@ -41,7 +49,9 @@ export const addFoodProductToUserKitchen = {
 
     return (
       <div>
-        <div>Successfully added {products.length} product to the database</div>
+        <div className="mb-4">
+          Successfully added {products.length} product to your kitchen!
+        </div>
         <InitialStateOptions message="Would you like to do anything else?" />
       </div>
     )
@@ -99,10 +109,78 @@ export const requestFoodNutritionalInformation = {
   },
 }
 
+export const createUserMeal = {
+  description: "Create a meal",
+  parameters: z.object({
+    search: z.string(),
+  }),
+  generate: async function* ({ search }) {
+    yield `Our top chefs are creating you a meal, sit tight...`
+    const userFoodProducts = await fetch(`${domain}/api/ingredients`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "GET",
+    }).then((result) => result.json())
+    console.log(userFoodProducts.data, "userFoodProducts::")
+    const { object } = await generateObject({
+      model: openaiModel("gpt-4o"),
+      schema: z.object({
+        meal: z.object({
+          name: z.string(),
+          ingredients: z.array(
+            z.object({
+              name: z.string(),
+              quantity: z.string(),
+              unit: z.string(),
+            }),
+          ),
+        }),
+      }),
+      prompt: `For this input: ${search}, return me the data in the structured format`,
+    })
+
+    const ingredients = getUserKitchenIngredients(
+      object.meal,
+      userFoodProducts.data,
+    )
+    const meal = {
+      name: object.meal.name,
+      ingredients,
+    }
+
+    return <CreateMealView meal={meal} />
+  },
+}
+
+function getUserKitchenIngredients(meal, foodProducts) {
+  console.log(meal, "meal::")
+  let ingredients = []
+  for (let index = 0; index < meal.ingredients.length; index++) {
+    const mealIngredient = meal.ingredients[index]
+    const foundProduct = foodProducts.find((prod) =>
+      prod.name.toLowerCase().includes(mealIngredient.name.toLowerCase()),
+    )
+    ingredients.push({ ...foundProduct, quantity: mealIngredient.quantity })
+  }
+
+  return ingredients
+}
+
+export const initializeMealCreation = {
+  description: "Initialize creating a meal",
+  parameters: z.object({}),
+  generate: async function* () {
+    console.log("initializing meal...")
+
+    return <InitializeCreateMealView />
+  },
+}
+
 const externalFoodSource = [
   {
     brand: "Tesco",
-    calories: 209,
+    calories: "209",
     carbohydrate: "0.0",
     cost: "5.5",
     fat: "9.2",
@@ -116,7 +194,7 @@ const externalFoodSource = [
   },
   {
     brand: "Tesco",
-    calories: 81,
+    calories: "81",
     carbohydrate: "14.0",
     cost: "2.0",
     fat: "0.4",
@@ -130,7 +208,7 @@ const externalFoodSource = [
   },
   {
     brand: "Tesco",
-    calories: 130,
+    calories: "130",
     carbohydrate: "28.0",
     cost: "0.8",
     fat: "0.3",
@@ -144,7 +222,7 @@ const externalFoodSource = [
   },
   {
     brand: "Tesco",
-    calories: 155,
+    calories: "155",
     carbohydrate: "1.1",
     cost: "0.2",
     fat: "10.0",
@@ -158,7 +236,7 @@ const externalFoodSource = [
   },
   {
     brand: "Tesco",
-    calories: 155,
+    calories: "155",
     carbohydrate: "1.1",
     cost: "0.2",
     fat: "12.0",
@@ -172,7 +250,7 @@ const externalFoodSource = [
   },
   {
     brand: "Tesco",
-    calories: 576,
+    calories: "576",
     carbohydrate: "22.0",
     cost: "15.0",
     fat: "50.0",
@@ -186,7 +264,7 @@ const externalFoodSource = [
   },
   {
     brand: "Tesco",
-    calories: 64,
+    calories: "64",
     carbohydrate: "4.8",
     cost: "0.6",
     fat: "3.5",
@@ -200,7 +278,7 @@ const externalFoodSource = [
   },
   {
     brand: "Tesco",
-    calories: 116,
+    calories: "116",
     carbohydrate: "0.0",
     cost: "1.5",
     fat: "1.0",
@@ -214,7 +292,7 @@ const externalFoodSource = [
   },
   {
     brand: "Tesco",
-    calories: 41,
+    calories: "41",
     carbohydrate: "9.6",
     cost: "1.0",
     fat: "0.1",
@@ -228,7 +306,7 @@ const externalFoodSource = [
   },
   {
     brand: "Tesco",
-    calories: 77,
+    calories: "77",
     carbohydrate: "17.0",
     cost: "0.4",
     fat: "0.1",
@@ -242,7 +320,7 @@ const externalFoodSource = [
   },
   {
     brand: "Tesco",
-    calories: 717,
+    calories: "717",
     carbohydrate: "0.6",
     cost: "5.0",
     fat: "81.0",
@@ -256,7 +334,7 @@ const externalFoodSource = [
   },
   {
     brand: "Tesco",
-    calories: 402,
+    calories: "402",
     carbohydrate: "1.3",
     cost: "9.0",
     fat: "33.0",
@@ -270,7 +348,7 @@ const externalFoodSource = [
   },
   {
     brand: "Tesco",
-    calories: 52,
+    calories: "52",
     carbohydrate: "14.0",
     cost: "3.0",
     fat: "0.2",
@@ -284,7 +362,7 @@ const externalFoodSource = [
   },
   {
     brand: "Tesco",
-    calories: 96,
+    calories: "96",
     carbohydrate: "23.0",
     cost: "1.5",
     fat: "0.3",
@@ -298,7 +376,7 @@ const externalFoodSource = [
   },
   {
     brand: "Tesco",
-    calories: 884,
+    calories: "884",
     carbohydrate: "0.0",
     cost: "10.0",
     fat: "100.0",
@@ -312,7 +390,7 @@ const externalFoodSource = [
   },
   {
     brand: "Tesco",
-    calories: 252,
+    calories: "252",
     carbohydrate: "49.0",
     cost: "2.5",
     fat: "3.3",
@@ -326,7 +404,7 @@ const externalFoodSource = [
   },
   {
     brand: "Tesco",
-    calories: 18,
+    calories: "18",
     carbohydrate: "3.9",
     cost: "2.0",
     fat: "0.2",
@@ -340,7 +418,7 @@ const externalFoodSource = [
   },
   {
     brand: "Tesco",
-    calories: 59,
+    calories: "59",
     carbohydrate: "6.0",
     cost: "1.0",
     fat: "3.0",
@@ -354,7 +432,7 @@ const externalFoodSource = [
   },
   {
     brand: "Tesco",
-    calories: 208,
+    calories: "208",
     carbohydrate: "0.0",
     cost: "20.0",
     fat: "13.0",
@@ -368,9 +446,9 @@ const externalFoodSource = [
   },
   {
     brand: "Tesco",
-    calories: 34,
+    calories: "34",
     carbohydrate: "6.6",
-    cost: "2.5",
+    cost: "1.5",
     fat: "0.3",
     food_group: "protein",
     name: "Broccoli",
@@ -382,9 +460,9 @@ const externalFoodSource = [
   },
   {
     brand: "Tesco",
-    calories: 546,
+    calories: "546",
     carbohydrate: "46.0",
-    cost: "8.0",
+    cost: "2.0",
     fat: "32.0",
     food_group: "protein",
     name: "Dark Chocolate",
@@ -392,6 +470,34 @@ const externalFoodSource = [
     quantity: "100",
     salt: "0.02",
     slug: "dark-chocolate",
+    unit: "g",
+  },
+  {
+    brand: "Tesco",
+    calories: "300",
+    carbohydrate: "6.0",
+    cost: "8.0",
+    fat: "12.0",
+    food_group: "protein",
+    name: "Sirloin Steak",
+    protein: "25.0",
+    quantity: "100",
+    salt: "0.6",
+    slug: "sirloin-steak",
+    unit: "g",
+  },
+  {
+    brand: "Tesco",
+    calories: "300",
+    carbohydrate: "5.0",
+    cost: "6.0",
+    fat: "12.0",
+    food_group: "protein",
+    name: "Rump Steak",
+    protein: "22.0",
+    quantity: "100",
+    salt: "0.5",
+    slug: "rump-steak",
     unit: "g",
   },
 ]

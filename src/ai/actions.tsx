@@ -9,15 +9,14 @@ import InitialStateOptions from "@/app/kitchen/_components/InitialStateOptions"
 
 import {
   addFoodProductToUserKitchen,
+  createUserMeal,
+  initializeMealCreation,
   displayUserFoodProducts,
   requestFoodNutritionalInformation,
   searchForFoodProduct,
 } from "./streamUITools"
 import { ReactNode } from "react"
-
-const openai = createOpenAI({
-  apiKey: process.env.OPEN_AI_API_KEY,
-})
+import { openaiModel } from "./modal"
 
 export interface ClientMessage {
   id: string
@@ -32,14 +31,15 @@ export interface ServerMessage {
 
 export async function submitUserMessage(input: string): Promise<ClientMessage> {
   const result = await streamUI({
-    model: openai("gpt-4o"),
+    model: openaiModel("gpt-4o"),
     system:
       "You are a friendly assistant helping a user manage their kitchen ingredients and helping them create different meals",
     prompt: input,
     text: async ({ content }) => <div>{content}</div>,
-
     tools: {
       addFoodProductToUserKitchen,
+      createUserMeal,
+      initializeMealCreation,
       displayUserFoodProducts,
       requestFoodNutritionalInformation,
       searchForFoodProduct,
@@ -55,7 +55,7 @@ export async function submitUserMessage(input: string): Promise<ClientMessage> {
 
 export async function initializeChatInteraction() {
   const result = await streamUI({
-    model: openai("gpt-4o"),
+    model: openaiModel("gpt-4o"),
     prompt: "",
     system:
       "You are asking the user what they would like to do in the app today",

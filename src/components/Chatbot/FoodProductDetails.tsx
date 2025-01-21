@@ -6,7 +6,7 @@ import Image from "next/image"
 export default function FoodProductDetails({
   foodProduct,
 }: {
-  foodProduct: FoodProduct
+  foodProduct: Omit<FoodProduct, "id">
 }) {
   return (
     <>
@@ -14,18 +14,18 @@ export default function FoodProductDetails({
         <Image
           alt="Product image"
           className="rounded-lg margin-auto"
-          // fill
           height={150}
-          width={150}
           objectFit="contain"
           src={`/food_products/${foodProduct.slug}.jpg`}
+          width={150}
         />
       </div>
 
-      <div className="flex items-center mb-2">
-        <div className="font-bold mr-1">{foodProduct.name}</div>
+      <div className="flex flex-col items-center mb-2">
+        <div className="font-bold mb-2">{foodProduct.name}</div>
         <span className="text-xs text-neutral-500">
-          (£ {foodProduct.cost}) / per {foodProduct.unit}
+          £ {foodProduct.cost} / per{" "}
+          {foodProduct.unit === "unit" ? "unit" : "100g"}
         </span>
       </div>
 

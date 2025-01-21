@@ -13,19 +13,29 @@ export default function AddProductsView({
 }) {
   const { submitUserMessage } = useActions()
   const [_, setMessages] = useUIState()
-  const [selectedProducts, setSelectedProducts] = useState<Array<FoodProduct>>(
-    [],
-  )
+  const [selectedProducts, setSelectedProducts] = useState<
+    Array<Omit<FoodProduct, "id">>
+  >([])
 
-  const toggle = (product: FoodProduct) => {
-    setSelectedProducts([...selectedProducts, product])
+  console.log(selectedProducts, "selectedProducts")
+
+  const toggle = (product: Omit<FoodProduct, "id">) => {
+    console.log(
+      product,
+      "prod",
+      selectedProducts.filter((sp) => sp.slug === product.slug),
+    )
+    if (selectedProducts.filter((sp) => sp.slug === product.slug).length > 0) {
+      return setSelectedProducts(
+        selectedProducts.filter((sp) => sp.slug !== product.slug),
+      )
+    } else {
+      console.log("in else?")
+      setSelectedProducts([...selectedProducts, product])
+    }
   }
 
-  const isSelected = (productName: string) => {
-    return selectedProducts
-      .flatMap((product) => product.name)
-      .includes(productName)
-  }
+  const productsText = selectedProducts.length === 1 ? "product" : "products"
 
   return (
     <div className="mb-4">
@@ -41,7 +51,7 @@ export default function AddProductsView({
           const bgColor = isSelected ? "bg-gray-50" : "bg-white"
           return (
             <div
-              className={`${bgColor} cursor-pointer rounded-sm p-2 mr-2 shadow-xl hover:border-blue-500 border-2`}
+              className={`${bgColor} cursor-pointer rounded-md p-2 mr-2 shadow-xl hover:border-blue-500 border-2`}
               onClick={() => toggle(product)}
             >
               <FoodProductDetails foodProduct={product} />
@@ -51,6 +61,7 @@ export default function AddProductsView({
       </div>
 
       <Button
+        disabled={selectedProducts.length === 0}
         onClick={async () => {
           const display = await submitUserMessage(
             `addFoodProductToUserKitchen ${JSON.stringify(selectedProducts)}`,
@@ -59,8 +70,7 @@ export default function AddProductsView({
           setMessages((messages: ReactNode[]) => [...messages, display])
         }}
       >
-        Add {selectedProducts.length}{" "}
-        {selectedProducts.length === 1 ? "product" : "products"} to kitchen
+        Add {selectedProducts.length} {productsText} to kitchen
       </Button>
     </div>
   )

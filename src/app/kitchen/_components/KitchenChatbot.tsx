@@ -6,9 +6,10 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 
 import { useActions, useUIState } from "ai/rsc"
 import { ClientMessage } from "@/ai/actions"
+import { AI } from "@/ai/context"
 
 export default function KitchenChatbot() {
-  const [conversation, setConversation] = useUIState()
+  const [conversation, setConversation] = useUIState<typeof AI>()
   const { initializeChatInteraction } = useActions()
 
   useEffect(() => {
@@ -18,7 +19,7 @@ export default function KitchenChatbot() {
   const onLoad = async () => {
     const message = await initializeChatInteraction()
 
-    setConversation((currentConversation: ClientMessage) => [
+    setConversation((currentConversation: Array<ClientMessage>) => [
       ...currentConversation,
       message,
     ])

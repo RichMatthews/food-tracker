@@ -1,9 +1,9 @@
-import { type MealIngredient, PrismaClient } from "@prisma/client"
+import { type FoodProduct, PrismaClient } from "@prisma/client"
 import { NextResponse } from "next/server"
 
 export async function POST(req: Request) {
   const body = await req.json()
-  console.log(body)
+
   const prisma = new PrismaClient()
   const mealData = {
     name: body.name,
@@ -11,14 +11,15 @@ export async function POST(req: Request) {
 
   const mealBack = await prisma.meal.create({ data: mealData })
 
+  console.log(body.ingredients, "body??")
   const mealIngredient = body.ingredients.map(
-    async (ingredient: MealIngredient) => {
-      const _ingredient = {
-        ingredientId: ingredient.id,
+    async (foodProduct: FoodProduct) => {
+      const _foodProduct = {
+        foodProductId: foodProduct.id,
         mealId: mealBack.id,
-        quantity: ingredient.quantity,
+        quantity: foodProduct.quantity,
       }
-      await prisma.mealIngredient.create({ data: _ingredient })
+      await prisma.mealFoodProduct.create({ data: _foodProduct })
     },
   )
 

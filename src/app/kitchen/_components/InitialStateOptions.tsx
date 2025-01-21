@@ -5,7 +5,7 @@ import { useActions, useUIState } from "ai/rsc"
 import { Button } from "@/components/ui/button"
 
 export default function InitialStateOptions({
-  message = "Hello, welcome to your kitchen, what would you like to do today?",
+  message = "Hello, how may I assist you today?",
 }) {
   return (
     <div className="mb-4">
@@ -14,7 +14,7 @@ export default function InitialStateOptions({
         <Option messageTool="searchForFoodProduct">Add a product</Option>
         <Option messageTool="removeFoodProduct">Remove a product</Option>
         <Option messageTool="editFoodProduct">Edit a product</Option>
-        <Option messageTool="createMeal">Create a meal</Option>
+        <Option messageTool="initializeMealCreation">Create a meal</Option>
       </div>
     </div>
   )
