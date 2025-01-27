@@ -8,18 +8,17 @@ export default function NutritionalInfoContent({
   foodProduct: FoodProduct
 }) {
   return (
-    <div className="flex flex-col items-center mr-10 mb-10 shadow w-36">
-      <div className="relative w-36 h-24 bg-white w-full">
+    <div className="flex flex-col bg-white items-center mr-4 mb-4 rounded-md w-36">
+      <div className="relative w-36 h-24 w-full">
         <Image
           alt="The product image"
-          className="rounded-lg"
           fill
           objectFit="contain"
           src={`/food_products/${foodProduct.slug}.jpg`}
           style={{ viewTransitionName: foodProduct.slug }}
         />
       </div>
-      <span className="font-semibold bg-white w-full text-sm px-2 py-4">
+      <span className="font-semibold bg-white w-full text-sm text-center p-2">
         {foodProduct.name}
       </span>
     </div>
